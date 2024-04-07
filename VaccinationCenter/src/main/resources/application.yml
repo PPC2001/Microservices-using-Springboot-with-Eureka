@@ -1,0 +1,36 @@
+server:
+  port: 8082
+ 
+ 
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/VaccinationCenterDB
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+  
+  application:
+    name: VACCINATION-CENTER-SERVICE 
+    
+resilience4j.circuitbreaker:
+  instances:
+    citizenCircuitBreaker:
+      registerHealthIndicator: true
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10 
+      slidingWindowSize: 10
+      slidingWindowType: COUNT_BASED
+      
+management:
+  endpoints.web.exposure.include: health
+  endpoint.health.show-details: always
+  health.circuitbreakers.enabled: true
